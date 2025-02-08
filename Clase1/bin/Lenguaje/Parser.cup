@@ -1,0 +1,26 @@
+// === 1. Package e imports
+package Lenguaje;
+import java_cup.runtime.*;
+
+// === configuración
+parser code
+{:
+    // Código Java
+:}
+
+// === terminales
+terminal String TK_suma, TK_numero;
+
+// === no terminales
+non terminal INICIO;
+non terminal OPERACIONES;
+non terminal OPERACION;
+
+// === presedencia de operadores
+
+// === Gramatica
+start with INICIO;
+
+INICIO ::= OPERACION;
+
+OPERACION ::= TK_numero TK_suma TK_numero ;
