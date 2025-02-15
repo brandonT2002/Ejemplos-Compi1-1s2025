@@ -1,0 +1,36 @@
+match GraaskampvsRandom {
+    players strategies: [Graaskamp, Random]
+    rounds: 100
+    scoring: {
+        mutual cooperation: 3, 
+        mutual defection: 1, 
+        betrayal reward: 5, 
+        betrayal punishment: 0 
+    }
+}
+
+main {
+    run [GraaskampvsRandom] with {
+        seed: 42
+    }
+}
+
+strategy Graaskamp {
+    initial: D
+    rules: [
+        else C
+    ]
+}
+strategy Graaskamp {
+    initial: D
+    rules: [
+        else C
+    ]
+}
+
+strategy Random {
+    initial: C
+    rules: [
+        else D
+    ]
+}

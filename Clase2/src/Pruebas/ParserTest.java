@@ -7,8 +7,7 @@ import java.io.StringReader;
 
 import Lenguaje.Parser;
 import Lenguaje.Scanner;
-
-public class PruebaT {
+public class ParserTest {
     public static void main(String[] args) throws Exception {
         try {
             String input = readInput("./Inputs/Prueba.txt");

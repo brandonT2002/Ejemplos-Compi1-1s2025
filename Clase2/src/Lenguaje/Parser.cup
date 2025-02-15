@@ -1,0 +1,136 @@
+/* 1. Package e importaciones */
+package Lenguaje;
+import java_cup.runtime.*;
+
+/* 2. Codigo para el parser, variables y metodos */
+parser code
+{:
+    // Codigo Java
+:}
+
+/* 3. Terminales*/
+terminal String RW_strategy, RW_initial, RW_C, RW_D, RW_rules, RW_if, RW_then, RW_else, RW_get_move, RW_last_move, RW_get_moves_count, get_last_n_moves ;
+terminal String RW_round_number, RW_match, RW_players, RW_strategies, RW_rounds, RW_scoring, RW_cooperacionM, RW_defeccionnM, RW_traidor, RW_traicionado, RW_main, RW_run, RW_with, RW_seed, RW_get_last_n_moves;
+terminal String TK_id, TK_enteros, TK_decimales, TK_igual, TK_diferente, TK_mayor, TK_menor, TK_menorIgual, TK_mayorIgual, TK_or, TK_and, TK_not;
+terminal String TK_llaveA, TK_llaveC, TK_corcheteA, TK_corcheteC, TK_parA, TK_parC, TK_dosPuntos, TK_coma;
+
+/* 4. No Terminales*/
+non terminal INICIO;
+non terminal INSTRUCCIONES;
+non terminal INSTRUCCION;
+non terminal ESTRATEGIAS;
+non terminal ESTRATEGIA;
+non terminal INSTRUCCIONES_ESTRATEGIA;
+non terminal DECISION_INICIAL;
+non terminal REGLAS;
+non terminal LISTA_REGLAS;
+non terminal REGLA;
+non terminal PARTIDAS;
+non terminal PARTIDA;
+non terminal INSTRUCIONES_PARTIDA;
+non terminal JUGADORES;
+non terminal RONDAS;
+non terminal PUNTUACIONES;
+non terminal PUNTOS;
+non terminal COOPERACION_MUTUA;
+non terminal DEFECCION_MUTUA;
+non terminal TRAIDOR;
+non terminal TRAICIONADO;
+non terminal PUNTO_ACCESO;
+non terminal INSTRUCCIONES_ACCESO;
+non terminal EXPRESION;
+non terminal RELACIONALES;
+non terminal LOGICAS;
+non terminal DECISION;
+
+/*5. Precedencia de Operadores*/
+precedence left TK_igual;
+precedence left TK_mayor;
+precedence left TK_menor;
+precedence left TK_mayorIgual;
+precedence left TK_menorIgual;
+precedence left TK_and;
+precedence left TK_or;
+precedence right TK_not;
+
+/*6. Gramática*/
+start with INICIO;
+
+INICIO ::=  INSTRUCCIONES ;
+
+INSTRUCCIONES ::= 
+            INSTRUCCIONES INSTRUCCION |
+            INSTRUCCION ;
+
+INSTRUCCION ::= 
+            ESTRATEGIA  |
+            PARTIDA     |
+            PUNTO_ACCESO ;
+
+ESTRATEGIA ::= RW_strategy TK_id TK_llaveA INSTRUCCIONES_ESTRATEGIA TK_llaveC ;
+
+INSTRUCCIONES_ESTRATEGIA ::= DECISION_INICIAL REGLAS ;
+
+DECISION_INICIAL ::= RW_initial TK_dosPuntos DECISION ;
+
+REGLAS ::= RW_rules TK_dosPuntos TK_corcheteA RW_else EXPRESION TK_corcheteC ;
+
+/*LISTA_REGLAS ::= 
+            LISTA_REGLAS TK_coma REGLA |
+            REGLA ;
+
+REGLA ::= 
+            RW_if EXPRESION RW_then EXPRESION |
+            RW_else EXPRESION ;
+*/
+
+// === DELCARACION DE PARTIDAS ===
+
+PARTIDA ::= RW_match TK_id TK_llaveA INSTRUCIONES_PARTIDA TK_llaveC ;
+
+INSTRUCIONES_PARTIDA ::= JUGADORES RONDAS PUNTUACIONES;
+
+JUGADORES ::= RW_players RW_strategies TK_dosPuntos TK_corcheteA TK_id TK_coma TK_id TK_corcheteC ;
+
+RONDAS ::= RW_rounds TK_dosPuntos EXPRESION ;
+
+PUNTUACIONES ::= RW_scoring TK_dosPuntos TK_llaveA PUNTOS TK_llaveC ;
+
+PUNTOS ::= COOPERACION_MUTUA TK_coma DEFECCION_MUTUA TK_coma TRAIDOR TK_coma TRAICIONADO ;
+
+COOPERACION_MUTUA ::= RW_cooperacionM TK_dosPuntos EXPRESION ;
+
+DEFECCION_MUTUA ::= RW_defeccionnM TK_dosPuntos EXPRESION ;
+
+TRAIDOR ::= RW_traidor TK_dosPuntos EXPRESION ;
+
+TRAICIONADO ::= RW_traicionado TK_dosPuntos EXPRESION ;
+
+// === PUNTO DE ACCESO ===
+
+PUNTO_ACCESO ::= RW_main TK_llaveA INSTRUCCIONES_ACCESO TK_llaveC ;
+
+INSTRUCCIONES_ACCESO ::= RW_run TK_corcheteA TK_id TK_corcheteC RW_with TK_llaveA RW_seed TK_dosPuntos EXPRESION TK_llaveC ;
+
+EXPRESION ::=
+            RELACIONALES |
+            LOGICAS      |
+            DECISION     |
+            TK_enteros   |
+            TK_decimales ;
+
+RELACIONALES ::= 
+            EXPRESION TK_igual EXPRESION |
+            EXPRESION TK_mayorIgual EXPRESION |
+            EXPRESION TK_menorIgual EXPRESION |
+            EXPRESION TK_mayor EXPRESION |
+            EXPRESION TK_menor EXPRESION ;
+
+LOGICAS ::=
+            EXPRESION TK_and EXPRESION |
+            EXPRESION TK_or EXPRESION  |
+            TK_not EXPRESION ;
+
+DECISION ::=
+            RW_C  |
+            RW_D ;
