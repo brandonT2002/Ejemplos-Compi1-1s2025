@@ -9,6 +9,7 @@ import Clases.Abstractas.Expresion;
 import Clases.Abstractas.Instruccion;
 import Clases.Expresion.*;
 import Clases.Instruccion.*;
+import Clases.Objetos.*;
 
 /* 2. Codigo para el parser, variables y metodos */
 parser code
@@ -37,17 +38,17 @@ non terminal ArrayList<Regla> REGLAS;
 non terminal ArrayList<Regla> LISTA_REGLAS;
 non terminal REGLA;
 non terminal PARTIDAS;
-non terminal PARTIDA;
-non terminal INSTRUCIONES_PARTIDA;
-non terminal JUGADORES;
-non terminal RONDAS;
-non terminal PUNTUACIONES;
-non terminal PUNTOS;
-non terminal COOPERACION_MUTUA;
-non terminal DEFECCION_MUTUA;
-non terminal TRAIDOR;
-non terminal TRAICIONADO;
-non terminal PUNTO_ACCESO;
+non terminal Instruccion PARTIDA;
+non terminal InstruccionesPartida INSTRUCIONES_PARTIDA;
+non terminal Jugadores JUGADORES;
+non terminal Expresion RONDAS;
+non terminal Puntos PUNTUACIONES;
+non terminal Puntos PUNTOS;
+non terminal Expresion COOPERACION_MUTUA;
+non terminal Expresion DEFECCION_MUTUA;
+non terminal Expresion TRAIDOR;
+non terminal Expresion TRAICIONADO;
+non terminal Instruccion PUNTO_ACCESO;
 non terminal INSTRUCCIONES_ACCESO;
 non terminal Expresion EXPRESION;
 non terminal RELACIONALES;
@@ -78,10 +79,10 @@ INSTRUCCIONES ::=
 
 INSTRUCCION ::= 
             ESTRATEGIA :e {: RESULT = e; :} |
-            PARTIDA     |
-            PUNTO_ACCESO ;
+            PARTIDA    :e {: RESULT = e; :} |
+            PUNTO_ACCESO :e {: RESULT = e; :};
 
-ESTRATEGIA ::= RW_strategy :n TK_id TK_llaveA INSTRUCCIONES_ESTRATEGIA :inst TK_llaveC {: RESULT = new CrearEstrategia(n, inst); :} ;
+ESTRATEGIA ::= RW_strategy TK_id :n TK_llaveA INSTRUCCIONES_ESTRATEGIA :inst TK_llaveC {: RESULT = new CrearEstrategia(n, inst); :} ;
 
 INSTRUCCIONES_ESTRATEGIA ::= DECISION_INICIAL :i REGLAS :r {: RESULT = new InstruccionEstrategia(i, r); :} ;
 
@@ -96,31 +97,31 @@ LISTA_REGLAS ::=
 
 // === DELCARACION DE PARTIDAS ===
 
-PARTIDA ::= RW_match TK_id TK_llaveA INSTRUCIONES_PARTIDA TK_llaveC ;
+PARTIDA ::= RW_match TK_id :n TK_llaveA INSTRUCIONES_PARTIDA :inst TK_llaveC {: RESULT = new CrearPartida(n, inst); :} ;
 
-INSTRUCIONES_PARTIDA ::= JUGADORES RONDAS PUNTUACIONES;
+INSTRUCIONES_PARTIDA ::= JUGADORES :j RONDAS :r PUNTUACIONES :p {: RESULT = new InstruccionesPartida(j, r, p); :};
 
-JUGADORES ::= RW_players RW_strategies TK_dosPuntos TK_corcheteA TK_id TK_coma TK_id TK_corcheteC ;
+JUGADORES ::= RW_players RW_strategies TK_dosPuntos TK_corcheteA TK_id :j1 TK_coma TK_id :j2 TK_corcheteC {: RESULT = new Jugadores(j1, j2); :} ;
 
-RONDAS ::= RW_rounds TK_dosPuntos EXPRESION ;
+RONDAS ::= RW_rounds TK_dosPuntos EXPRESION :exp {: RESULT = exp; :} ;
 
-PUNTUACIONES ::= RW_scoring TK_dosPuntos TK_llaveA PUNTOS TK_llaveC ;
+PUNTUACIONES ::= RW_scoring TK_dosPuntos TK_llaveA PUNTOS :p TK_llaveC {: RESULT = p; :} ;
 
-PUNTOS ::= COOPERACION_MUTUA TK_coma DEFECCION_MUTUA TK_coma TRAIDOR TK_coma TRAICIONADO ;
+PUNTOS ::= COOPERACION_MUTUA :c TK_coma DEFECCION_MUTUA :d TK_coma TRAIDOR :tr TK_coma TRAICIONADO :ta {: RESULT = new Puntos(c, d, tr, ta); :} ;
 
-COOPERACION_MUTUA ::= RW_cooperacionM TK_dosPuntos EXPRESION ;
+COOPERACION_MUTUA ::= RW_cooperacionM TK_dosPuntos EXPRESION :exp {: RESULT =  exp; :} ;
 
-DEFECCION_MUTUA ::= RW_defeccionnM TK_dosPuntos EXPRESION ;
+DEFECCION_MUTUA ::= RW_defeccionnM TK_dosPuntos EXPRESION :exp {: RESULT =  exp; :} ;
 
-TRAIDOR ::= RW_traidor TK_dosPuntos EXPRESION ;
+TRAIDOR ::= RW_traidor TK_dosPuntos EXPRESION :exp {: RESULT =  exp; :} ;
 
-TRAICIONADO ::= RW_traicionado TK_dosPuntos EXPRESION ;
+TRAICIONADO ::= RW_traicionado TK_dosPuntos EXPRESION :exp {: RESULT =  exp; :} ;
 
 // === PUNTO DE ACCESO ===
 
-PUNTO_ACCESO ::= RW_main TK_llaveA INSTRUCCIONES_ACCESO TK_llaveC ;
+PUNTO_ACCESO ::= RW_main TK_llaveA INSTRUCCIONES_ACCESO :p TK_llaveC {: RESULT = new PuntoAcceso(p); :} ;
 
-INSTRUCCIONES_ACCESO ::= RW_run TK_corcheteA TK_id TK_corcheteC RW_with TK_llaveA RW_seed TK_dosPuntos EXPRESION TK_llaveC ;
+INSTRUCCIONES_ACCESO ::= RW_run TK_corcheteA TK_id :id TK_corcheteC RW_with TK_llaveA RW_seed TK_dosPuntos EXPRESION TK_llaveC {: RESULT = id; :} ;
 
 EXPRESION ::=
             RELACIONALES |

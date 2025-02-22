@@ -9,7 +9,7 @@ import Clases.Utilidades.TipoInstruccion;
 
 public class InstruccionEstrategia extends Instruccion{
     Expresion inicio;
-    ArrayList<Regla> reglas;
+    public ArrayList<Regla> reglas;
     public InstruccionEstrategia (Expresion inicio, ArrayList<Regla> reglas) {
         super(TipoInstruccion.ESTRATEGIA);
         this.inicio = inicio;

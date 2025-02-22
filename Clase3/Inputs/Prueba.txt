@@ -8,13 +8,13 @@ strategy Graaskamp {
 strategy Random {
     initial: C
     rules: [
-        else C
+        else D
     ]
 }
 
 match GraaskampvsRandom {
     players strategies: [Graaskamp, Random]
-    rounds: 100
+    rounds: 5
     scoring: {
         mutual cooperation: 3, 
         mutual defection: 1, 

@@ -17,5 +17,6 @@ public class CrearEstrategia extends Instruccion {
     public void jugar(Entorno entorno) {
         Estrategia estrategia = new Estrategia(nombre, instrucciones);
         entorno.guardarEstrategia(nombre, estrategia);
+        System.out.println("guardó la estrategia");
     }
 }

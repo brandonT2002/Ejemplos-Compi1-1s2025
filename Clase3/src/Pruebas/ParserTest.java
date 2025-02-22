@@ -21,13 +21,18 @@ public class ParserTest {
             Parser parser = new Parser(scanner);
             parser.parse();
             Entorno global = new Entorno("global");
+            String salida_ = "";
             for (Instruccion instruccion : parser.sentencias) {
                 try {
                     instruccion.jugar(global);
+                    for (String salida : Clases.Utilidades.Salida.salidaConsola) {
+                        salida_ += salida;
+                    }
                 } catch (Exception e) {
 
                 }
             }
+            System.out.println(salida_);
         }
         catch(Exception e) {
             System.out.println(e);

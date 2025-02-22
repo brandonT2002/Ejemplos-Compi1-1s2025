@@ -13,6 +13,7 @@ import Clases.Abstractas.Expresion;
 import Clases.Abstractas.Instruccion;
 import Clases.Expresion.*;
 import Clases.Instruccion.*;
+import Clases.Objetos.*;
 import java_cup.runtime.XMLElement;
 
 /** CUP v0.11b 20160615 (GIT 4ac7450) generated parser.
@@ -485,7 +486,10 @@ class CUP$Parser$actions {
           case 5: // INSTRUCCION ::= PARTIDA 
             {
               Instruccion RESULT =null;
-
+		int eleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
+		int eright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
+		Instruccion e = (Instruccion)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		 RESULT = e; 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("INSTRUCCION",2, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -494,7 +498,10 @@ class CUP$Parser$actions {
           case 6: // INSTRUCCION ::= PUNTO_ACCESO 
             {
               Instruccion RESULT =null;
-
+		int eleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
+		int eright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
+		Instruccion e = (Instruccion)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		 RESULT = e; 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("INSTRUCCION",2, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -503,9 +510,9 @@ class CUP$Parser$actions {
           case 7: // ESTRATEGIA ::= RW_strategy TK_id TK_llaveA INSTRUCCIONES_ESTRATEGIA TK_llaveC 
             {
               CrearEstrategia RESULT =null;
-		int nleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)).left;
-		int nright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)).right;
-		String n = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-4)).value;
+		int nleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)).left;
+		int nright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)).right;
+		String n = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-3)).value;
 		int instleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
 		int instright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
 		InstruccionEstrategia inst = (InstruccionEstrategia)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
@@ -601,8 +608,14 @@ class CUP$Parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 14: // PARTIDA ::= RW_match TK_id TK_llaveA INSTRUCIONES_PARTIDA TK_llaveC 
             {
-              Object RESULT =null;
-
+              Instruccion RESULT =null;
+		int nleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)).left;
+		int nright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)).right;
+		String n = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-3)).value;
+		int instleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
+		int instright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
+		InstruccionesPartida inst = (InstruccionesPartida)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
+		 RESULT = new CrearPartida(n, inst); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("PARTIDA",11, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -610,8 +623,17 @@ class CUP$Parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 15: // INSTRUCIONES_PARTIDA ::= JUGADORES RONDAS PUNTUACIONES 
             {
-              Object RESULT =null;
-
+              InstruccionesPartida RESULT =null;
+		int jleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).left;
+		int jright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
+		Jugadores j = (Jugadores)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
+		int rleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
+		int rright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
+		Expresion r = (Expresion)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
+		int pleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
+		int pright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
+		Puntos p = (Puntos)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		 RESULT = new InstruccionesPartida(j, r, p); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("INSTRUCIONES_PARTIDA",12, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -619,8 +641,14 @@ class CUP$Parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 16: // JUGADORES ::= RW_players RW_strategies TK_dosPuntos TK_corcheteA TK_id TK_coma TK_id TK_corcheteC 
             {
-              Object RESULT =null;
-
+              Jugadores RESULT =null;
+		int j1left = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)).left;
+		int j1right = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)).right;
+		String j1 = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-3)).value;
+		int j2left = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
+		int j2right = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
+		String j2 = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
+		 RESULT = new Jugadores(j1, j2); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("JUGADORES",13, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-7)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -628,8 +656,11 @@ class CUP$Parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 17: // RONDAS ::= RW_rounds TK_dosPuntos EXPRESION 
             {
-              Object RESULT =null;
-
+              Expresion RESULT =null;
+		int expleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
+		int expright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
+		Expresion exp = (Expresion)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		 RESULT = exp; 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("RONDAS",14, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -637,8 +668,11 @@ class CUP$Parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 18: // PUNTUACIONES ::= RW_scoring TK_dosPuntos TK_llaveA PUNTOS TK_llaveC 
             {
-              Object RESULT =null;
-
+              Puntos RESULT =null;
+		int pleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
+		int pright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
+		Puntos p = (Puntos)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
+		 RESULT = p; 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("PUNTUACIONES",15, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -646,8 +680,20 @@ class CUP$Parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 19: // PUNTOS ::= COOPERACION_MUTUA TK_coma DEFECCION_MUTUA TK_coma TRAIDOR TK_coma TRAICIONADO 
             {
-              Object RESULT =null;
-
+              Puntos RESULT =null;
+		int cleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-6)).left;
+		int cright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-6)).right;
+		Expresion c = (Expresion)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-6)).value;
+		int dleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)).left;
+		int dright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)).right;
+		Expresion d = (Expresion)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-4)).value;
+		int trleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).left;
+		int trright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
+		Expresion tr = (Expresion)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
+		int taleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
+		int taright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
+		Expresion ta = (Expresion)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		 RESULT = new Puntos(c, d, tr, ta); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("PUNTOS",16, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-6)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -655,8 +701,11 @@ class CUP$Parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 20: // COOPERACION_MUTUA ::= RW_cooperacionM TK_dosPuntos EXPRESION 
             {
-              Object RESULT =null;
-
+              Expresion RESULT =null;
+		int expleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
+		int expright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
+		Expresion exp = (Expresion)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		 RESULT =  exp; 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("COOPERACION_MUTUA",17, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -664,8 +713,11 @@ class CUP$Parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 21: // DEFECCION_MUTUA ::= RW_defeccionnM TK_dosPuntos EXPRESION 
             {
-              Object RESULT =null;
-
+              Expresion RESULT =null;
+		int expleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
+		int expright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
+		Expresion exp = (Expresion)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		 RESULT =  exp; 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("DEFECCION_MUTUA",18, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -673,8 +725,11 @@ class CUP$Parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 22: // TRAIDOR ::= RW_traidor TK_dosPuntos EXPRESION 
             {
-              Object RESULT =null;
-
+              Expresion RESULT =null;
+		int expleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
+		int expright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
+		Expresion exp = (Expresion)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		 RESULT =  exp; 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("TRAIDOR",19, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -682,8 +737,11 @@ class CUP$Parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 23: // TRAICIONADO ::= RW_traicionado TK_dosPuntos EXPRESION 
             {
-              Object RESULT =null;
-
+              Expresion RESULT =null;
+		int expleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
+		int expright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
+		Expresion exp = (Expresion)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		 RESULT =  exp; 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("TRAICIONADO",20, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -691,8 +749,11 @@ class CUP$Parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 24: // PUNTO_ACCESO ::= RW_main TK_llaveA INSTRUCCIONES_ACCESO TK_llaveC 
             {
-              Object RESULT =null;
-
+              Instruccion RESULT =null;
+		int pleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
+		int pright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
+		Object p = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
+		 RESULT = new PuntoAcceso(p); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("PUNTO_ACCESO",21, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -701,7 +762,10 @@ class CUP$Parser$actions {
           case 25: // INSTRUCCIONES_ACCESO ::= RW_run TK_corcheteA TK_id TK_corcheteC RW_with TK_llaveA RW_seed TK_dosPuntos EXPRESION TK_llaveC 
             {
               Object RESULT =null;
-
+		int idleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-7)).left;
+		int idright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-7)).right;
+		String id = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-7)).value;
+		 RESULT = id; 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("INSTRUCCIONES_ACCESO",22, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-9)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
