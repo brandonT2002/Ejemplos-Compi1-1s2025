@@ -1,0 +1,15 @@
+{
+    "java.project.sourcePaths": ["src"],
+    "java.project.outputPath": "bin",
+    "java.project.referencedLibraries": {
+        "include": [
+            "lib/**/*.jar",
+            "c:\\Users\\Jefferson\\workspace-Java\\Librerias\\java-cup-11b.jar",
+            "c:\\Users\\Jefferson\\workspace-Java\\Librerias\\java-cup-11b-runtime.jar",
+            "c:\\Users\\Jefferson\\workspace-Java\\Librerias\\jflex-full-1.7.0.jar"
+        ],
+        "exclude": [
+            "c:\\Users\\Jefferson\\workspace-Java\\Librerias\\jflex-full-1.7.0.jar"
+        ]
+    }
+}
