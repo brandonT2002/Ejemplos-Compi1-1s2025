@@ -4,7 +4,6 @@ import Clases.Abstractas.Instruccion;
 import Clases.Entorno.Entorno;
 import Clases.Objetos.Estrategia;
 import Clases.Objetos.Partida;
-import Clases.Utilidades.Salida;
 import Clases.Utilidades.TipoInstruccion;
 
 public class PuntoAcceso extends Instruccion{
@@ -12,10 +11,10 @@ public class PuntoAcceso extends Instruccion{
     int rondas;
     boolean decision1;
     boolean decision2;
-    int cooperacion;
-    int defeccion;
-    int traidor;
-    int traicionado;
+    int cooperacion = 0;
+    int defeccion = 0;
+    int traidor = 0;
+    int traicionado = 0;
     int puntuacion1 = 0;
     int puntuacion2 = 0;
     public PuntoAcceso(Object partida) {
@@ -34,12 +33,9 @@ public class PuntoAcceso extends Instruccion{
             cooperacion = (int) partida.puntos.cooperacion.jugar(entorno).valor;
             defeccion = (int) partida.puntos.defeccion.jugar(entorno).valor;
             traidor = (int) partida.puntos.traidor.jugar(entorno).valor;
-            // System.out.println("T: " + traicionado);
-            // traicionado = (int) partida.puntos.traicionado.jugar(entorno).valor;
-            // System.out.println("TR: " + traicionado);
+            traicionado = (int) partida.puntos.traicionado.jugar(entorno).valor;
 
             for (int i = 1; i <= rondas; i++) {
-                // System.out.println("-> algo");
                 decision1 = (boolean) validarRegla(entorno, estrategia1);
                 decision2 = (boolean) validarRegla(entorno, estrategia2);
                 formato();
@@ -47,8 +43,6 @@ public class PuntoAcceso extends Instruccion{
         }
         System.out.println(puntuacion1);
         System.out.println(puntuacion2);
-        // Salida.salidaConsola.add("-> " + puntuacion1 + "\n");
-        // Salida.salidaConsola.add("-> " + puntuacion2 + "\n");
     }
 
     public Object validarRegla(Entorno entorno, Estrategia estrategia) {
@@ -57,7 +51,6 @@ public class PuntoAcceso extends Instruccion{
         for (Regla regla : estrategia.instrucciones.reglas) {
             if (regla.condicion != null) {
                 // regla if CONDICION then ACCION 
-                // return
             }
             decisonDefault = regla.acion.jugar(entorno).valor;
         }
