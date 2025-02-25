@@ -16,7 +16,7 @@ strategy Graaskamp {
 strategy Random {
     initial: C
     rules: [
-        if random() < 0.5 then C,
+        if random < 0.5 then C,
         else D
     ]
 }
