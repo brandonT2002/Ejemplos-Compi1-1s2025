@@ -1,0 +1,33 @@
+strategy Graaskamp {
+    initial: D
+    rules: [
+        if 15 == 17 then D,
+        if round_number == 5 then C,
+        if false then C,
+        else D
+    ]
+}
+
+strategy Random {
+    initial: C
+    rules: [
+        else C
+    ]
+}
+
+match GraaskampvsRandom {
+    players strategies: [Graaskamp, Random]
+    rounds: 10
+    scoring: {
+        mutual cooperation: 3, 
+        mutual defection: 1, 
+        betrayal reward: 5,
+        betrayal punishment: 0 
+    }
+}
+
+main {
+    run [GraaskampvsRandom] with {
+        seed: 42
+    }
+}
