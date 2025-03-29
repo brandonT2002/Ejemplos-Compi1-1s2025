@@ -1,0 +1,5 @@
+// Declaracion y Asignacion de Variables
+ingresar var1 como entero con valor 12 @
+
+// imprimir 15
+imprimir var1

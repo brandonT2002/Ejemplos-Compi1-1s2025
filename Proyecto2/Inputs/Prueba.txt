@@ -1,0 +1,5 @@
+// Declaracion y Asignacion de Variables
+
+imprimir 'z'
+imprimir 122 == 'z'
+imprimir verdadero == 12
