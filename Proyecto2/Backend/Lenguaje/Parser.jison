@@ -34,6 +34,15 @@ COMMENTM    [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
 'imprimir'              { return 'RW_imprimir' }
 'verdadero'             { return 'RW_verdadero'}
 'falso'                 { return 'RW_falso'    }
+'fin'                   { return 'RW_fin'      }
+'o'                     { return 'RW_o'       }
+'si'                    { return 'RW_si'       }
+'de lo contrario'       { return 'RW_deLoContrario' }
+'para'                  { return 'RW_para'     }
+'hasta'                 { return 'RW_hasta'    }
+'incremento'            { return 'RW_incremento' }
+'hacer'                 { return 'RW_hacer'    }
+'entonces'              { return 'RW_entonces' }
 // === TIPOS DE DATOS ===
 'entero'                { return 'RW_entero'   }
 'decimal'               { return 'RW_decimal'  }
@@ -46,10 +55,6 @@ COMMENTM    [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
 // === ASIGNACION ===
 '->'                    { return 'TK_asign'    }
 // === OPERADORES ===
-// === LOGICOS ===
-'&&'                    { return 'TK_and'      }
-'||'                    { return 'TK_or'       }
-'!'                     { return 'TK_not'      }
 // === RELACIONALES ===
 '=='                    { return 'TK_igual'    }
 '!='                    { return 'TK_dif'      }
@@ -57,6 +62,13 @@ COMMENTM    [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
 '<'                     { return 'TK_menor'    }
 '>='                    { return 'TK_mayorI'   }
 '<='                    { return 'TK_menorI'   }
+// === LOGICOS ===
+'&&'                    { return 'TK_and'      }
+'||'                    { return 'TK_or'       }
+'!'                     { return 'TK_not'      }
+// === INC DEC ===
+'++'                    { return 'TK_inc'     }
+'--'                    { return 'TK_dec'     }
 // === ARITMETICOS ===
 '+'                     { return 'TK_suma'     }
 '-'                     { return 'TK_resta'    }
@@ -78,10 +90,14 @@ COMMENTM    [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
     const { Tipo } = require ('../Clases/Utilidades/Tipo')
     // Instrucciones
     const { DeclaracionID } = require ('../Clases/Instrucciones/DeclaracionID')
+    const { Asignacion } = require ('../Clases/Instrucciones/Asignacion')
     const { Imprimir } = require ('../Clases/Instrucciones/Imprimir')
+    const { Si } = require ('../Clases/Instrucciones/Si')
+    const { Para } = require ('../Clases/Instrucciones/Para')
     // Expresiones
     const { Primitivo } = require ('../Clases/Expresiones/Primitivo')
     const { AccesoID } = require ('../Clases/Expresiones/AccesoID')
+    const { IncDec } = require ('../Clases/Expresiones/IncDec')
     const { Aritmetico } = require ('../Clases/Expresiones/Aritmetico')
     const { Relacional } = require ('../Clases/Expresiones/Relacional')
     const { Logico } = require ('../Clases/Expresiones/Logico')
@@ -111,7 +127,10 @@ INSTRUCCIONES :
 
 INSTRUCCION :
             DECLARACION {$$ = $1} |  
+            ASIGNACION  {$$ = $1} |
             IMPRIMIR    {$$ = $1} |
+            CONDICIONAL_SI {$$ = $1} |
+            CICLO_PARA |
             error       {errores.push(new Error(this._$.first_line, this._$.first_column + 1, TipoError.SINTACTICO, `No se esperaba «${yytext}»`))} ;
 
 DECLARACION :
@@ -120,10 +139,28 @@ DECLARACION :
 IMPRIMIR :
             RW_imprimir EXPRESION {$$ = new Imprimir(@1.first_line, @1.first_column, $2)} ;
 
+ASIGNACION :
+            TK_id TK_asign EXPRESION {$$ = new Asignacion(@1.first_line, @1.first_column, $1, $3)} ;
+
+INCREMENTO :
+            TK_id TK_inc {$$ = new IncDec(@1.first_line, @1.first_column, $1, 'inc')} ;
+
+// === CONDIONALES ===
+// === SI ===
+CONDICIONAL_SI :
+            RW_si EXPRESION RW_entonces INSTRUCCIONES RW_deLoContrario INSTRUCCIONES RW_fin RW_si  {$$ = new Si(@1.first_line, @1.first_column, $2, $4, $6)}        |
+            RW_si EXPRESION RW_entonces INSTRUCCIONES RW_fin RW_si                                 {$$ = new Si(@1.first_line, @1.first_column, $2, $4, undefined)} ;
+
+// === CICLOS ===
+// === PARA ===
+CICLO_PARA :
+            RW_para TK_id TK_asign EXPRESION RW_hasta EXPRESION RW_con RW_incremento EXPRESION RW_hacer INSTRUCCIONES RW_fin RW_para {$$ = new Para(@1.first_line, @1.first_column, $2, $4, $6, $11)} ;
+
 EXPRESION :
             ARITMETICOS  {$$ = $1} |
             RELACIONALES {$$ = $1} |
             LOGICOS      {$$ = $1} |
+            INCREMENTO   {$$ = $1} |
             TK_id        {$$ = new AccesoID(@1.first_line, @1.first_column, $1                )} |
             RW_verdadero {$$ = new Primitivo(@1.first_line, @1.first_column, $1, Tipo.BOOLEANO)} |
             RW_falso     {$$ = new Primitivo(@1.first_line, @1.first_column, $1, Tipo.BOOLEANO)} |

@@ -31,6 +31,19 @@ export class Entorno {
         return null
     }
 
+    // === Actualizar Variable ===
+    public setVariable(id: string, valor: any) {
+        let entorno: Entorno | null = this
+        while (entorno != null) {
+            if (entorno.ids.has(id)) {
+                let simbolo: Simbolo = entorno.ids.get(id)!
+                simbolo.valor = valor
+                return
+            }
+            entorno = entorno.anterior;
+        }
+    }
+
     public setPrint(print: string) {
         salidasConsola.push(print)
     }

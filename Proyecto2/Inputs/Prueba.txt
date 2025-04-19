@@ -1,5 +1,19 @@
-// Declaracion y Asignacion de Variables
+ingresar var1 como entero con valor 10
+ingresar var2 como entero con valor 12
 
-imprimir 'z'
-imprimir 122 == 'z'
-imprimir verdadero == 12
+imprimir var2++
+
+var2 -> var2 + 1
+imprimir var2
+
+/*si var2 == 12 entonces
+    imprimir "SI ES 12"
+de lo contrario
+    imprimir "YA NO SALE"
+fin si
+*/
+
+ingresar i como entero con valor 0
+para i -> 0 hasta 5 con incremento i++ hacer
+    imprimir "i = " + i
+fin para
