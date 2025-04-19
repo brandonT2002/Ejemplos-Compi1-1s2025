@@ -1,6 +1,7 @@
 import { Expresion } from "../Abstractas/Expresion";
 import { Instruccion } from "../Abstractas/Instruccion";
 import { Entorno } from "../Entorno/Entorno";
+import { Simbolo } from "../Entorno/Simbolo";
 import { TipoInstruccion } from "../Utilidades/TipoInstruccion";
 
 export class IncDec extends Instruccion{

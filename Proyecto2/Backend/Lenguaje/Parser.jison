@@ -43,6 +43,8 @@ COMMENTM    [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
 'incremento'            { return 'RW_incremento' }
 'hacer'                 { return 'RW_hacer'    }
 'entonces'              { return 'RW_entonces' }
+'retornar'              { return 'RW_retornar' }
+'continuar'              { return 'RW_continuar' }
 // === TIPOS DE DATOS ===
 'entero'                { return 'RW_entero'   }
 'decimal'               { return 'RW_decimal'  }
@@ -94,6 +96,7 @@ COMMENTM    [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
     const { Imprimir } = require ('../Clases/Instrucciones/Imprimir')
     const { Si } = require ('../Clases/Instrucciones/Si')
     const { Para } = require ('../Clases/Instrucciones/Para')
+    const { Continuar } = require ('../Clases/Instrucciones/Continuar')
     // Expresiones
     const { Primitivo } = require ('../Clases/Expresiones/Primitivo')
     const { AccesoID } = require ('../Clases/Expresiones/AccesoID')
@@ -101,6 +104,7 @@ COMMENTM    [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
     const { Aritmetico } = require ('../Clases/Expresiones/Aritmetico')
     const { Relacional } = require ('../Clases/Expresiones/Relacional')
     const { Logico } = require ('../Clases/Expresiones/Logico')
+    const { Retornar } = require ('../Clases/Expresiones/Retornar')
 %}
 
 // Precedencia de Operadores
@@ -130,7 +134,9 @@ INSTRUCCION :
             ASIGNACION  {$$ = $1} |
             IMPRIMIR    {$$ = $1} |
             CONDICIONAL_SI {$$ = $1} |
-            CICLO_PARA |
+            CICLO_PARA  {$$ = $1} |
+            RW_continuar {$$ = new Continuar(@1.first_line, @1.first_column)} |
+            RW_retornar           {$$ = new Retornar(@1.first_line, @1.first_column, undefined)} |
             error       {errores.push(new Error(this._$.first_line, this._$.first_column + 1, TipoError.SINTACTICO, `No se esperaba «${yytext}»`))} ;
 
 DECLARACION :

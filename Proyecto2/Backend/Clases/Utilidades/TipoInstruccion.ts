@@ -5,5 +5,6 @@ export enum TipoInstruccion {
     INCREMENTO,
     DECREMENTO,
     SI,
-    PARA
+    PARA,
+    CONTINUAR
 }

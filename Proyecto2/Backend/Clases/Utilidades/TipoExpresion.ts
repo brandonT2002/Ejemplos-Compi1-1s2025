@@ -5,4 +5,6 @@ export enum TipoExpresion {
     LOGICO,
     ACCESO_ID,
     FUNCION_NATIVA,
+    INC_DEC,
+    RETORNAR,
 }

@@ -15,5 +15,8 @@ fin si
 
 ingresar i como entero con valor 0
 para i -> 0 hasta 5 con incremento i++ hacer
+    si i == 3 entonces
+        continuar
+    fin si
     imprimir "i = " + i
 fin para

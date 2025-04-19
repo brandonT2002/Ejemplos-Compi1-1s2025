@@ -16,7 +16,12 @@ export class Si extends Instruccion{
                 try {
                     const result = instruccion.ejecutar(entornoLocal);
                     if (result) {
-                        return result;
+                        if (result.tipo == TipoInstruccion.CONTINUAR) {
+                            console.log('Continuar: ')
+                            continue;
+                        } else {
+                            return result;
+                        }
                     }
                 } catch (error) {}
             }
