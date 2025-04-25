@@ -116,6 +116,8 @@ COMMENTM    [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
 %left 'TK_suma' 'TK_resta'
 %left 'TK_mult' 'TK_div' 'TK_mod'
 %right TK_negacionUnaria
+%precedence 'RW_retornar'
+%precedence 'EXPR_PRIO'
 
 // Gramática
 %start INICIO
@@ -136,8 +138,12 @@ INSTRUCCION :
             CONDICIONAL_SI {$$ = $1} |
             CICLO_PARA  {$$ = $1} |
             RW_continuar {$$ = new Continuar(@1.first_line, @1.first_column)} |
-            RW_retornar           {$$ = new Retornar(@1.first_line, @1.first_column, undefined)} |
+            RETORNO     {$$ = $1} |
             error       {errores.push(new Error(this._$.first_line, this._$.first_column + 1, TipoError.SINTACTICO, `No se esperaba «${yytext}»`))} ;
+
+RETORNO : 
+            RW_retornar { $$ = new Retornar(@1.first_line, @1.first_column, null); }            | 
+            RW_retornar EXPR_GENERAL { $$ = new Retornar(@1.first_line, @1.first_column, $2); } ;
 
 DECLARACION :
             RW_ingresar TK_id RW_como TIPO RW_con RW_valor EXPRESION {$$ = new DeclaracionID(@1.first_line, @1.first_column, $2, $4, $7)} ;
