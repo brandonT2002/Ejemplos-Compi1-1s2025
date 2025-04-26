@@ -7,5 +7,6 @@ export enum TipoInstruccion {
     BLOQUE_INSTRUCCIONES,
     SI,
     PARA,
+    DECLARAR_FUNCION,
     CONTINUAR
 }

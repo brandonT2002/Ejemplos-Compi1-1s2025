@@ -44,7 +44,10 @@ COMMENTM    [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
 'hacer'                 { return 'RW_hacer'    }
 'entonces'              { return 'RW_entonces' }
 'retornar'              { return 'RW_retornar' }
-'continuar'              { return 'RW_continuar' }
+'regresar'              { return 'RW_regresar' }
+'continuar'             { return 'RW_continuar'}
+'funcion'               { return 'RW_funcion'  }
+'parametros'            { return 'RW_parametros' }
 // === TIPOS DE DATOS ===
 'entero'                { return 'RW_entero'   }
 'decimal'               { return 'RW_decimal'  }
@@ -97,6 +100,7 @@ COMMENTM    [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
     const { Si } = require ('../Clases/Instrucciones/Si')
     const { Para } = require ('../Clases/Instrucciones/Para')
     const { Continuar } = require ('../Clases/Instrucciones/Continuar')
+    const { Funcion } = require ('../Clases/Instrucciones/Funcion')
     // Expresiones
     const { Primitivo } = require ('../Clases/Expresiones/Primitivo')
     const { AccesoID } = require ('../Clases/Expresiones/AccesoID')
@@ -105,6 +109,8 @@ COMMENTM    [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
     const { Relacional } = require ('../Clases/Expresiones/Relacional')
     const { Logico } = require ('../Clases/Expresiones/Logico')
     const { Retornar } = require ('../Clases/Expresiones/Retornar')
+    const { Parametro } = require ('../Clases/Expresiones/Parametro')
+    const { LlamadaFUncion } = require ('../Clases/Expresiones/LlamadaFUncion')
 %}
 
 // Precedencia de Operadores
@@ -134,6 +140,7 @@ INSTRUCCIONES :
 INSTRUCCION :
             DECLARACION {$$ = $1} |  
             ASIGNACION  {$$ = $1} |
+            FUNCIONES_METODOS {$$ = $1} |
             IMPRIMIR    {$$ = $1} |
             CONDICIONAL_SI {$$ = $1} |
             CICLO_PARA  {$$ = $1} |
@@ -142,8 +149,8 @@ INSTRUCCION :
             error       {errores.push(new Error(this._$.first_line, this._$.first_column + 1, TipoError.SINTACTICO, `No se esperaba «${yytext}»`))} ;
 
 RETORNO : 
-            RW_retornar { $$ = new Retornar(@1.first_line, @1.first_column, null); }            | 
-            RW_retornar EXPR_GENERAL { $$ = new Retornar(@1.first_line, @1.first_column, $2); } ;
+            RW_regresar { $$ = new Retornar(@1.first_line, @1.first_column, null); }            | 
+            RW_retornar EXPRESION { $$ = new Retornar(@1.first_line, @1.first_column, $2); } ;
 
 DECLARACION :
             RW_ingresar TK_id RW_como TIPO RW_con RW_valor EXPRESION {$$ = new DeclaracionID(@1.first_line, @1.first_column, $2, $4, $7)} ;
@@ -168,11 +175,32 @@ CONDICIONAL_SI :
 CICLO_PARA :
             RW_para TK_id TK_asign EXPRESION RW_hasta EXPRESION RW_con RW_incremento EXPRESION RW_hacer INSTRUCCIONES RW_fin RW_para {$$ = new Para(@1.first_line, @1.first_column, $2, $4, $6, $11)} ;
 
+// === FUNCIONES/METODOS ===
+FUNCIONES_METODOS :
+            RW_funcion TK_id TIPO RW_con RW_parametros TK_parA PARAMETROS TK_parC INSTRUCCIONES RW_fin RW_funcion {$$ = new Funcion(@1.first_line, @1.first_column, $2, $3, $7, $9)} |
+            RW_funcion TK_id TIPO INSTRUCCIONES RW_fin RW_funcion {$$ = new Funcion(@1.first_line, @1.first_column, $2, $3, undefined, $4)} ;
+
+PARAMETROS :
+            PARAMETROS TK_coma PARAMETRO {$$.push($3)} |
+            PARAMETRO {$$ = [$1]} ;
+
+PARAMETRO :
+            TK_id TIPO {$$ = new Parametro(@1.first_line, @1.first_column, $1, $2)} ;
+
+// === LLAMAR FUNCION/METODO ===
+LLAMAR_FUNCIONES_METODOS :
+            TK_id TK_parA TK_parC {$$ = new LlamadaFUncion(@1.first_line, @1.first_column, $1, [])} ;
+
+ARGUMENTOS :
+            ARGUMENTOS TK_coma EXPRESION {$$.push($3)} |
+            EXPRESION {$$ = [$1]} |;
+
 EXPRESION :
             ARITMETICOS  {$$ = $1} |
             RELACIONALES {$$ = $1} |
             LOGICOS      {$$ = $1} |
             INCREMENTO   {$$ = $1} |
+            LLAMAR_FUNCIONES_METODOS {$$ = $1} |
             TK_id        {$$ = new AccesoID(@1.first_line, @1.first_column, $1                )} |
             RW_verdadero {$$ = new Primitivo(@1.first_line, @1.first_column, $1, Tipo.BOOLEANO)} |
             RW_falso     {$$ = new Primitivo(@1.first_line, @1.first_column, $1, Tipo.BOOLEANO)} |

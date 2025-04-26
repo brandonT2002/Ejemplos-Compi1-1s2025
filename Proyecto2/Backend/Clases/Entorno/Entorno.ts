@@ -2,9 +2,11 @@ import { Console } from "console";
 import { salidasConsola } from "../Utilidades/Salida";
 import { Tipo } from "../Utilidades/Tipo";
 import { Simbolo } from "./Simbolo";
+import { Funcion } from "../Instrucciones/Funcion";
 
 export class Entorno {
     public ids: Map<string, Simbolo> = new Map<string, Simbolo>()
+    public funciones: Map<string, Funcion> = new Map<string, Funcion>()
 
     constructor(private anterior: Entorno | null, public nombre: string) {}
 
@@ -42,6 +44,31 @@ export class Entorno {
             }
             entorno = entorno.anterior;
         }
+    }
+
+    // === GUARDAR FUNCION ===
+    public guardarFuncion(id: string, funcion: Funcion , linea: number, columna: number) {
+        let entorno: Entorno = this
+        if (!entorno.funciones.has(id)) {
+            // Guardar Funcion
+            // console.log('Guardando funcion: ' + id + ' en el entorno: ' + entorno.nombre)
+            // console.log(funcion)
+            entorno.funciones.set(id, funcion)
+        }
+        // Error semántico - Funcion ya existe
+    }
+
+    // === OBTENER FUNCION ===
+    public getFuncion(id: string): Funcion | null {
+        let entorno: Entorno | null = this
+        while (entorno != null) {
+            if (entorno.funciones.has(id)) {
+                return entorno.funciones.get(id)!
+            }
+            entorno = entorno.anterior
+        }
+        // Error semántico - Funcion no existe
+        return null
     }
 
     public setPrint(print: string) {

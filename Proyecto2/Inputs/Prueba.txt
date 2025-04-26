@@ -13,10 +13,21 @@ de lo contrario
 fin si
 */
 
-ingresar i como entero con valor 0
+/*ingresar i como entero con valor 0
 para i -> 0 hasta 5 con incremento i++ hacer
     si i == 3 entonces
-        continuar
+        regresar
     fin si
     imprimir "i = " + i
-fin para
+fin para*/
+
+funcion suma entero con parametros (valor1 entero, valor2 entero)
+    retornar 12
+fin funcion
+
+funcion resta entero
+    retornar 15 - 10
+fin funcion
+
+ingresar resultado como entero con valor resta()
+imprimir "Resultado: " + resultado
