@@ -9,6 +9,6 @@ export class Continuar extends Instruccion{
     }
 
     public ejecutar(entorno: Entorno) {
-        return { tipo: TipoInstruccion.CONTINUAR, valor: null };
+        return { valor: this.tipoInstruccion, tipo: null };
     }
 }

@@ -3,14 +3,16 @@ import { Instruccion } from "../Abstractas/Instruccion";
 import { Entorno } from "../Entorno/Entorno";
 import { Tipo } from "../Utilidades/Tipo";
 import { TipoInstruccion } from "../Utilidades/TipoInstruccion";
+import { Bloque } from "./Bloque";
 
 export class Para extends Instruccion{
+    private bloque: Bloque;
     constructor(linea: number, columna: number, private inicio: string, private limiteInferior: Expresion, private limiteSuperior: Expresion, private instrucciones: Instruccion[]) {
         super(linea, columna, TipoInstruccion.PARA);
+        this.bloque = new Bloque(linea, columna, instrucciones);
     }
 
     public ejecutar(entorno: Entorno) {
-        console.log('Ejecutando Para')
         const entornoLocal = new Entorno(entorno, entorno.nombre + '_FOR')
         var limiteInferior = this.limiteInferior.ejecutar(entornoLocal);
         if (limiteInferior.tipo != Tipo.ENTERO) {
@@ -26,19 +28,12 @@ export class Para extends Instruccion{
         if (entorno.getVariable(this.inicio)){
             for (let i = limiteInferior.valor; i <= limiteSuperior.valor; i++) {
                 entorno.setVariable(this.inicio, i);
-                for (const instruccion of this.instrucciones) {
-                    try {
-                        const result = instruccion.ejecutar(entornoLocal);
-                        if (result) {
-                            if (result.tipo == TipoInstruccion.CONTINUAR) {
-                                console.log('Continuar: ')
-                                continue;
-                            } else {
-                                return result;
-                            }
-                            // Validación break
-                        }
-                    } catch (error) {}
+                let bloque = this.bloque.ejecutar(entornoLocal);
+                if (bloque) {
+                    if (bloque.valor == TipoInstruccion.CONTINUAR) {
+                        continue; // Continuar con la siguiente iteración
+                    }
+                    return bloque;
                 }
             }
             return;

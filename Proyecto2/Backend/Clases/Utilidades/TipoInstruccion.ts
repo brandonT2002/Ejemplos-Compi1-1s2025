@@ -4,6 +4,7 @@ export enum TipoInstruccion {
     ASIGNACION,
     INCREMENTO,
     DECREMENTO,
+    BLOQUE_INSTRUCCIONES,
     SI,
     PARA,
     CONTINUAR
