@@ -47,7 +47,7 @@ export class Entorno {
     }
 
     // === GUARDAR FUNCION ===
-    public guardarFuncion(id: string, funcion: Funcion , linea: number, columna: number) {
+    public guardarFuncion(id: string, funcion: Funcion) {
         let entorno: Entorno = this
         if (!entorno.funciones.has(id)) {
             // Guardar Funcion

@@ -178,7 +178,7 @@ CICLO_PARA :
 // === FUNCIONES/METODOS ===
 FUNCIONES_METODOS :
             RW_funcion TK_id TIPO RW_con RW_parametros TK_parA PARAMETROS TK_parC INSTRUCCIONES RW_fin RW_funcion {$$ = new Funcion(@1.first_line, @1.first_column, $2, $3, $7, $9)} |
-            RW_funcion TK_id TIPO INSTRUCCIONES RW_fin RW_funcion {$$ = new Funcion(@1.first_line, @1.first_column, $2, $3, undefined, $4)} ;
+            RW_funcion TK_id TIPO INSTRUCCIONES RW_fin RW_funcion {$$ = new Funcion(@1.first_line, @1.first_column, $2, $3, [], $4)} ;
 
 PARAMETROS :
             PARAMETROS TK_coma PARAMETRO {$$.push($3)} |
@@ -189,11 +189,12 @@ PARAMETRO :
 
 // === LLAMAR FUNCION/METODO ===
 LLAMAR_FUNCIONES_METODOS :
+            TK_id TK_parA ARGUMENTOS TK_parC {$$ = new LlamadaFUncion(@1.first_line, @1.first_column, $1, $3)} |
             TK_id TK_parA TK_parC {$$ = new LlamadaFUncion(@1.first_line, @1.first_column, $1, [])} ;
 
 ARGUMENTOS :
             ARGUMENTOS TK_coma EXPRESION {$$.push($3)} |
-            EXPRESION {$$ = [$1]} |;
+            EXPRESION {$$ = [$1]}                      ;
 
 EXPRESION :
             ARITMETICOS  {$$ = $1} |

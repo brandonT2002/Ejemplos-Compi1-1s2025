@@ -12,6 +12,6 @@ export class Funcion extends Instruccion{
     }
 
     public ejecutar(entorno: Entorno) {
-        entorno.guardarFuncion(this.nombreFuncion, this, this.linea, this.columna);
+        entorno.guardarFuncion(this.nombreFuncion, this);
     }
 }

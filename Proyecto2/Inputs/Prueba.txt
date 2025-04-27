@@ -1,11 +1,11 @@
-ingresar var1 como entero con valor 10
+/*ingresar var1 como entero con valor 10
 ingresar var2 como entero con valor 12
 
 imprimir var2++
 
 var2 -> var2 + 1
 imprimir var2
-
+*/
 /*si var2 == 12 entonces
     imprimir "SI ES 12"
 de lo contrario
@@ -21,13 +21,13 @@ para i -> 0 hasta 5 con incremento i++ hacer
     imprimir "i = " + i
 fin para*/
 
-funcion suma entero con parametros (valor1 entero, valor2 entero)
-    retornar 12
-fin funcion
-
 funcion resta entero
     retornar 15 - 10
 fin funcion
 
-ingresar resultado como entero con valor resta()
-imprimir "Resultado: " + resultado
+funcion suma entero con parametros (valor1 entero, valor2 entero)
+    retornar valor1 + valor2
+fin funcion
+
+imprimir "Resta = " + resta()
+imprimir "Suma = " + suma(12, 10)
