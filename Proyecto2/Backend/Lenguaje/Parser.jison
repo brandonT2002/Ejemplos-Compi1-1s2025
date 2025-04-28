@@ -122,8 +122,6 @@ COMMENTM    [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
 %left 'TK_suma' 'TK_resta'
 %left 'TK_mult' 'TK_div' 'TK_mod'
 %right TK_negacionUnaria
-%precedence 'RW_retornar'
-%precedence 'EXPR_PRIO'
 
 // Gramática
 %start INICIO
@@ -138,19 +136,19 @@ INSTRUCCIONES :
             INSTRUCCION               {$$ = [$1]  } ;
 
 INSTRUCCION :
-            DECLARACION {$$ = $1} |  
-            ASIGNACION  {$$ = $1} |
+            DECLARACION       {$$ = $1} |  
+            ASIGNACION        {$$ = $1} |
             FUNCIONES_METODOS {$$ = $1} |
-            IMPRIMIR    {$$ = $1} |
-            CONDICIONAL_SI {$$ = $1} |
-            CICLO_PARA  {$$ = $1} |
-            RW_continuar {$$ = new Continuar(@1.first_line, @1.first_column)} |
-            RETORNO     {$$ = $1} |
-            error       {errores.push(new Error(this._$.first_line, this._$.first_column + 1, TipoError.SINTACTICO, `No se esperaba «${yytext}»`))} ;
+            IMPRIMIR          {$$ = $1} |
+            CONDICIONAL_SI    {$$ = $1} |
+            CICLO_PARA        {$$ = $1} |
+            RETORNO           {$$ = $1} |
+            RW_continuar      {$$ = new Continuar(@1.first_line, @1.first_column)} |
+            error             {errores.push(new Error(this._$.first_line, this._$.first_column + 1, TipoError.SINTACTICO, `No se esperaba «${yytext}»`))} ;
 
 RETORNO : 
-            RW_regresar { $$ = new Retornar(@1.first_line, @1.first_column, null); }            | 
-            RW_retornar EXPRESION { $$ = new Retornar(@1.first_line, @1.first_column, $2); } ;
+            RW_regresar           {$$ = new Retornar(@1.first_line, @1.first_column, null);} |
+            RW_retornar EXPRESION {$$ = new Retornar(@1.first_line, @1.first_column, $2);  } ;
 
 DECLARACION :
             RW_ingresar TK_id RW_como TIPO RW_con RW_valor EXPRESION {$$ = new DeclaracionID(@1.first_line, @1.first_column, $2, $4, $7)} ;
@@ -178,11 +176,11 @@ CICLO_PARA :
 // === FUNCIONES/METODOS ===
 FUNCIONES_METODOS :
             RW_funcion TK_id TIPO RW_con RW_parametros TK_parA PARAMETROS TK_parC INSTRUCCIONES RW_fin RW_funcion {$$ = new Funcion(@1.first_line, @1.first_column, $2, $3, $7, $9)} |
-            RW_funcion TK_id TIPO INSTRUCCIONES RW_fin RW_funcion {$$ = new Funcion(@1.first_line, @1.first_column, $2, $3, [], $4)} ;
+            RW_funcion TK_id TIPO INSTRUCCIONES RW_fin RW_funcion                                                 {$$ = new Funcion(@1.first_line, @1.first_column, $2, $3, [], $4)} ;
 
 PARAMETROS :
             PARAMETROS TK_coma PARAMETRO {$$.push($3)} |
-            PARAMETRO {$$ = [$1]} ;
+            PARAMETRO                    {$$ = [$1]  } ;
 
 PARAMETRO :
             TK_id TIPO {$$ = new Parametro(@1.first_line, @1.first_column, $1, $2)} ;
@@ -190,17 +188,17 @@ PARAMETRO :
 // === LLAMAR FUNCION/METODO ===
 LLAMAR_FUNCIONES_METODOS :
             TK_id TK_parA ARGUMENTOS TK_parC {$$ = new LlamadaFUncion(@1.first_line, @1.first_column, $1, $3)} |
-            TK_id TK_parA TK_parC {$$ = new LlamadaFUncion(@1.first_line, @1.first_column, $1, [])} ;
+            TK_id TK_parA TK_parC            {$$ = new LlamadaFUncion(@1.first_line, @1.first_column, $1, [])} ;
 
 ARGUMENTOS :
             ARGUMENTOS TK_coma EXPRESION {$$.push($3)} |
-            EXPRESION {$$ = [$1]}                      ;
+            EXPRESION                    {$$ = [$1]  } ;
 
 EXPRESION :
-            ARITMETICOS  {$$ = $1} |
-            RELACIONALES {$$ = $1} |
-            LOGICOS      {$$ = $1} |
-            INCREMENTO   {$$ = $1} |
+            ARITMETICOS              {$$ = $1} |
+            RELACIONALES             {$$ = $1} |
+            LOGICOS                  {$$ = $1} |
+            INCREMENTO               {$$ = $1} |
             LLAMAR_FUNCIONES_METODOS {$$ = $1} |
             TK_id        {$$ = new AccesoID(@1.first_line, @1.first_column, $1                )} |
             RW_verdadero {$$ = new Primitivo(@1.first_line, @1.first_column, $1, Tipo.BOOLEANO)} |
@@ -228,10 +226,10 @@ RELACIONALES :
             EXPRESION TK_menorI EXPRESION {$$ = new Relacional(@1.first_line, @1.first_column, $1, $2, $3)} ;
 
 LOGICOS :
-            EXPRESION TK_and EXPRESION {$$ = new Logico(@1.first_line, @1.first_column, $1, $2, $3)} |
-            EXPRESION TK_or  EXPRESION {$$ = new Logico(@1.first_line, @1.first_column, $1, $2, $3)} |
+            EXPRESION TK_and EXPRESION {$$ = new Logico(@1.first_line, @1.first_column, $1, $2, $3)       } |
+            EXPRESION TK_or  EXPRESION {$$ = new Logico(@1.first_line, @1.first_column, $1, $2, $3)       } |
             TK_not EXPRESION           {$$ = new Logico(@1.first_line, @1.first_column, undefined, $1, $2)} ;
 
 TIPO :
-            RW_entero  {$$ = Tipo.ENTERO} |
+            RW_entero  {$$ = Tipo.ENTERO } |
             RW_decimal {$$ = Tipo.DECIMAL} ;
