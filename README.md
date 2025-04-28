@@ -64,10 +64,10 @@ imprimir nota
 nota -> 70.0
 
 segun nota hacer
-    en caso de ser nota > 85
+    en caso de ser nota > 85 entonces
         imprimir "Excelente"
         detener
-    en caso de ser nota >= 61 && nota <= 85
+    en caso de ser nota >= 61 && nota <= 85 entonces
         imprimir "Aprobado"
         detener
     de lo contrario entonces
