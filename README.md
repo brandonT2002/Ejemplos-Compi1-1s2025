@@ -124,7 +124,7 @@ funcion figura2 cadena con parametros (n entero)
     ingresar figura como cadena
 
     mientras i <= n hacer
-        j = -3 * n / 2
+        j -> -3 * n / 2
         mientras j <= 3 hacer
             si i < 0 entonces
                 absolutoi -> -i
