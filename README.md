@@ -127,15 +127,15 @@ funcion figura2 cadena con parametros (n entero)
         j = -3 * n / 2
         mientras j <= 3 hacer
             si i < 0 entonces
-                absolutoi = -i
+                absolutoi -> -i
             de lo contrario
-                absolutoi = i
+                absolutoi -> i
             fin si
 
             si j < 0 entonces
-                absolutoj = -j
+                absolutoj -> -j
             de lo contrario
-                absolutoj = j
+                absolutoj -> j
             fin si
 
             si (absolutoi + absolutoj < n) ||
