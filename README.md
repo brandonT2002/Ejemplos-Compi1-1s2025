@@ -53,7 +53,7 @@ de lo contrario
     imprimir "la suma es menor o igual a 15"
 fin si
 
-if num1 * num2 < 30 && num1 > num2 entonces
+si num1 * num2 < 30 && num1 > num2 entonces
     imprimir "El producto es menor que 30 y num1 es mayor que num2"
 de lo contrario
     imprimir "Al menos una de las condiciones no se cumple"
