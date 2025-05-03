@@ -3,6 +3,7 @@ import { Request,  Response } from "express";
 // import { symTable } from '../Classes/Env/SymbolTable';
 import { getSalida,  limpiarSalidas,  getErrores } from '../Clases/Utilidades/Salida';
 import { Entorno } from "../Clases/Entorno/Entorno";
+import { tablaSimbolos } from "../Clases/Entorno/Tabla";
 // import { AST,  ReturnAST } from "../Classes/Env/AST";
 // import { TypeInst } from "../Classes/Utils/TypeInst";
 
@@ -26,6 +27,7 @@ export class Controlador {
             }
             else {
                 limpiarSalidas()
+                tablaSimbolos.splice()
                 let instrucciones = parser.parse(data)
                 const global: Entorno = new Entorno(null, 'Global')
                 for(let instruccion of instrucciones) {
@@ -103,18 +105,18 @@ export class Controlador {
     //         })
     //     }
     // }
-    // public getSymbolsTable(req: Request, res: Response) {
-    //     try {
-    //         res.json({
-    //             table: symTable.symbols
-    //         })
-    //     }
-    //     catch (error) {
-    //         res.json({
-    //             table: error
-    //         })
-    //     }
-    // }
+    public getSymbolsTable(req: Request, res: Response) {
+        try {
+            res.json({
+                table: tablaSimbolos.simbolos
+            })
+        }
+        catch (error) {
+            res.json({
+                table: error
+            })
+        }
+    }
     public getErrores(req: Request, res: Response) {
         try {
             res.json({
