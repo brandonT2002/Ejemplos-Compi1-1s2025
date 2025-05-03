@@ -2,7 +2,7 @@ import { Expresion } from "../Abstractas/Expresion";
 import { Entorno } from "../Entorno/Entorno";
 import { Tipo, TipoRetorno } from "../Utilidades/Tipo";
 import { TipoExpresion } from "../Utilidades/TipoExpresion";
-import { suma } from "../Utilidades/OperacionDominante";
+import { suma, multiplicacion, potencia } from "../Utilidades/OperacionDominante";
 
 export class Aritmetico extends Expresion{
     private tipo: Tipo = Tipo.NULL;
@@ -19,8 +19,12 @@ export class Aritmetico extends Expresion{
                     return this.resta(entorno);
                 }
                 return this.negacionUnaria(entorno);
-            // case '*':
-            //     return this.multiplicacion(entorno);
+            case '*':
+                return this.multiplicacion(entorno);
+            case '/':
+                return this.division(entorno);
+            case '^':
+                return this.potencia(entorno);
             default:
                 throw new Error(`Operador logico no reconocido: ${this.signo}`);
         }
@@ -66,8 +70,42 @@ export class Aritmetico extends Expresion{
         return {valor: 'NULL', tipo: Tipo.NULL};
     }
     multiplicacion (entorno: Entorno): TipoRetorno {
-        const valor = this.exp2.ejecutar(entorno);
-        this.tipo = Tipo.BOOLEANO;
-        return {valor: ! valor.valor, tipo: this.tipo};
+        let valor1 = this.exp1.ejecutar(entorno);
+        let valor2 = this.exp2.ejecutar(entorno);
+        this.tipo = multiplicacion[valor1.tipo][valor2.tipo];
+        if (this.tipo !== Tipo.NULL) {
+            if (this.tipo === Tipo.ENTERO) {
+                return {valor: valor1.valor * valor2.valor, tipo: this.tipo};
+            } else if (this.tipo === Tipo.DECIMAL) {
+                return {valor: valor1.valor * valor2.valor, tipo: this.tipo};
+            }
+        }
+        return {valor: 'NULL', tipo: Tipo.NULL};
+    }
+    division (entorno: Entorno): TipoRetorno {
+        let valor1 = this.exp1.ejecutar(entorno);
+        let valor2 = this.exp2.ejecutar(entorno);
+        this.tipo = multiplicacion[valor1.tipo][valor2.tipo];
+        if (this.tipo !== Tipo.NULL) {
+            if (this.tipo === Tipo.ENTERO) {
+                return {valor: valor1.valor / valor2.valor, tipo: this.tipo};
+            } else if (this.tipo === Tipo.DECIMAL) {
+                return {valor: valor1.valor / valor2.valor, tipo: this.tipo};
+            }
+        }
+        return {valor: 'NULL', tipo: Tipo.NULL};
+    }
+    potencia (entorno: Entorno): TipoRetorno {
+        let valor1 = this.exp1.ejecutar(entorno);
+        let valor2 = this.exp2.ejecutar(entorno);
+        this.tipo = potencia[valor1.tipo][valor2.tipo];
+        if (this.tipo !== Tipo.NULL) {
+            if (this.tipo === Tipo.ENTERO) {
+                return {valor: Math.pow(valor1.valor, valor2.valor), tipo: this.tipo};
+            } else if (this.tipo === Tipo.DECIMAL) {
+                return {valor: Math.pow(valor1.valor, valor2.valor), tipo: this.tipo};
+            }
+        }
+        return {valor: 'NULL', tipo: Tipo.NULL};
     }
 }

@@ -41,6 +41,7 @@ COMMENTM    [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
 'para'                  { return 'RW_para'     }
 'hasta'                 { return 'RW_hasta'    }
 'incremento'            { return 'RW_incremento' }
+'decremento'            { return 'RW_decremento' }
 'hacer'                 { return 'RW_hacer'    }
 'entonces'              { return 'RW_entonces' }
 'retornar'              { return 'RW_retornar' }
@@ -48,9 +49,11 @@ COMMENTM    [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
 'continuar'             { return 'RW_continuar'}
 'funcion'               { return 'RW_funcion'  }
 'parametros'            { return 'RW_parametros' }
+'objeto'                { return 'RW_objeto'  }
 // === TIPOS DE DATOS ===
 'entero'                { return 'RW_entero'   }
 'decimal'               { return 'RW_decimal'  }
+'cadena'                { return 'RW_cadena'   }
 // === EXPRESIONES ===
 {ID}                    { return 'TK_id'       }
 {STRING}                { yytext = yytext.substr(1,yyleng - 2); return 'TK_string'   }
@@ -63,10 +66,10 @@ COMMENTM    [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
 // === RELACIONALES ===
 '=='                    { return 'TK_igual'    }
 '!='                    { return 'TK_dif'      }
-'>'                     { return 'TK_mayor'    }
-'<'                     { return 'TK_menor'    }
 '>='                    { return 'TK_mayorI'   }
 '<='                    { return 'TK_menorI'   }
+'>'                     { return 'TK_mayor'    }
+'<'                     { return 'TK_menor'    }
 // === LOGICOS ===
 '&&'                    { return 'TK_and'      }
 '||'                    { return 'TK_or'       }
@@ -80,6 +83,7 @@ COMMENTM    [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
 '*'                     { return 'TK_mult'     }
 '/'                     { return 'TK_div'      }
 '%'                     { return 'TK_mod'      }
+'^'                     { return 'TK_pot'    }
 // === SIGNOS DE AGRUPACION Y FINALIZACION ===
 '('                     { return 'TK_parA'     }
 ')'                     { return 'TK_parC'     }
@@ -101,6 +105,7 @@ COMMENTM    [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
     const { Para } = require ('../Clases/Instrucciones/Para')
     const { Continuar } = require ('../Clases/Instrucciones/Continuar')
     const { Funcion } = require ('../Clases/Instrucciones/Funcion')
+    const { GuardarObjeto } = require ('../Clases/Instrucciones/GuardarObjeto')
     // Expresiones
     const { Primitivo } = require ('../Clases/Expresiones/Primitivo')
     const { AccesoID } = require ('../Clases/Expresiones/AccesoID')
@@ -111,6 +116,8 @@ COMMENTM    [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
     const { Retornar } = require ('../Clases/Expresiones/Retornar')
     const { Parametro } = require ('../Clases/Expresiones/Parametro')
     const { LlamadaFUncion } = require ('../Clases/Expresiones/LlamadaFUncion')
+    const { AccesoObjeto } = require ('../Clases/Expresiones/AccesoObjeto')
+    const { Atributo } = require ('../Clases/Expresiones/Atributo')
 %}
 
 // Precedencia de Operadores
@@ -120,7 +127,7 @@ COMMENTM    [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
 %left 'TK_igual' 'TK_dif'
 %left 'TK_menor' 'TK_menorI' 'TK_mayor' 'TK_mayorI'
 %left 'TK_suma' 'TK_resta'
-%left 'TK_mult' 'TK_div' 'TK_mod'
+%left 'TK_mult' 'TK_div' 'TK_mod', 'TK_pot'
 %right TK_negacionUnaria
 
 // Gramática
@@ -136,7 +143,8 @@ INSTRUCCIONES :
             INSTRUCCION               {$$ = [$1]  } ;
 
 INSTRUCCION :
-            DECLARACION       {$$ = $1} |  
+            DECLARACION       {$$ = $1} |
+            OBJETOS           {$$ = $1} | 
             ASIGNACION        {$$ = $1} |
             FUNCIONES_METODOS {$$ = $1} |
             IMPRIMIR          {$$ = $1} |
@@ -160,7 +168,23 @@ ASIGNACION :
             TK_id TK_asign EXPRESION {$$ = new Asignacion(@1.first_line, @1.first_column, $1, $3)} ;
 
 INCREMENTO :
-            TK_id TK_inc {$$ = new IncDec(@1.first_line, @1.first_column, $1, 'inc')} ;
+            TK_id TK_inc {$$ = new IncDec(@1.first_line, @1.first_column, $1, 'inc')} |
+            TK_id TK_dec {$$ = new IncDec(@1.first_line, @1.first_column, $1, 'dec')} ;
+
+// === OBJETOS ===
+OBJETOS : 
+            RW_objeto TK_id TK_parA ATRIBUTORS_OBJETO TK_parC {$$ = new GuardarObjeto(@1.first_line, @1.first_column, $2, $4)} ;
+
+ATRIBUTORS_OBJETO :
+            ATRIBUTORS_OBJETO ATRIBUTO_OBJETO {$$.push($2)} |
+            ATRIBUTO_OBJETO                   {$$ = [$1]  } ;
+
+ATRIBUTO_OBJETO:
+            TK_id TIPO {$$ = new Atributo($1, $2, undefined)} ;
+
+// === OBTNER OBJETO ===
+OBTENER_OBJETO:
+            RW_objeto TK_id TK_parA TK_parC {$$ = new AccesoObjeto(@1.first_line, @1.first_column, $2)} ;
 
 // === CONDIONALES ===
 // === SI ===
@@ -171,7 +195,8 @@ CONDICIONAL_SI :
 // === CICLOS ===
 // === PARA ===
 CICLO_PARA :
-            RW_para TK_id TK_asign EXPRESION RW_hasta EXPRESION RW_con RW_incremento EXPRESION RW_hacer INSTRUCCIONES RW_fin RW_para {$$ = new Para(@1.first_line, @1.first_column, $2, $4, $6, $11)} ;
+            RW_para TK_id TK_asign EXPRESION RW_hasta EXPRESION RW_con RW_incremento EXPRESION RW_hacer INSTRUCCIONES RW_fin RW_para {$$ = new Para(@1.first_line, @1.first_column, $2, $4, $6, $8, $11)} |
+            RW_para TK_id TK_asign EXPRESION RW_hasta EXPRESION RW_con RW_decremento EXPRESION RW_hacer INSTRUCCIONES RW_fin RW_para {$$ = new Para(@1.first_line, @1.first_column, $2, $4, $6, $8, $11)} ;
 
 // === FUNCIONES/METODOS ===
 FUNCIONES_METODOS :
@@ -200,6 +225,7 @@ EXPRESION :
             LOGICOS                  {$$ = $1} |
             INCREMENTO               {$$ = $1} |
             LLAMAR_FUNCIONES_METODOS {$$ = $1} |
+            OBTENER_OBJETO           {$$ = $1} |
             TK_id        {$$ = new AccesoID(@1.first_line, @1.first_column, $1                )} |
             RW_verdadero {$$ = new Primitivo(@1.first_line, @1.first_column, $1, Tipo.BOOLEANO)} |
             RW_falso     {$$ = new Primitivo(@1.first_line, @1.first_column, $1, Tipo.BOOLEANO)} |
@@ -215,6 +241,7 @@ ARITMETICOS :
             EXPRESION TK_mult EXPRESION  {$$ = new Aritmetico(@1.first_line, @1.first_column, $1, $2, $3)} |
             EXPRESION TK_div  EXPRESION  {$$ = new Aritmetico(@1.first_line, @1.first_column, $1, $2, $3)} |
             EXPRESION TK_mod  EXPRESION  {$$ = new Aritmetico(@1.first_line, @1.first_column, $1, $2, $3)} |
+            EXPRESION TK_pot  EXPRESION  {$$ = new Aritmetico(@1.first_line, @1.first_column, $1, $2, $3)} |
             TK_resta EXPRESION %prec TK_negacionUnaria {$$ = new Aritmetico(@1.first_line, @1.first_column, undefined, $1, $2)} ;
 
 RELACIONALES : 
@@ -231,5 +258,6 @@ LOGICOS :
             TK_not EXPRESION           {$$ = new Logico(@1.first_line, @1.first_column, undefined, $1, $2)} ;
 
 TIPO :
+            RW_cadena  {$$ = Tipo.CADENA } |
             RW_entero  {$$ = Tipo.ENTERO } |
             RW_decimal {$$ = Tipo.DECIMAL} ;

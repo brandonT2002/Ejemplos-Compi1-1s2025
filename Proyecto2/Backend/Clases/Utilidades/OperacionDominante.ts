@@ -15,3 +15,20 @@ export const resta: Tipo[][] = [
     [Tipo.ENTERO,  Tipo.DECIMAL, Tipo.NULL,   Tipo.NULL, Tipo.NULL],
     [Tipo.NULL,  Tipo.NULL,  Tipo.NULL, Tipo.NULL, Tipo.NULL],
 ]
+
+export const multiplicacion: Tipo[][] = [
+    [Tipo.ENTERO,  Tipo.DECIMAL, Tipo.ENTERO ],
+    [Tipo.DECIMAL, Tipo.DECIMAL, Tipo.DECIMAL],
+    [Tipo.ENTERO,  Tipo.DECIMAL, Tipo.NULL   ],
+]
+
+export const division: Tipo[][] = [
+    [Tipo.DECIMAL, Tipo.DECIMAL, Tipo.DECIMAL],
+    [Tipo.DECIMAL, Tipo.DECIMAL, Tipo.DECIMAL],
+    [Tipo.DECIMAL, Tipo.DECIMAL, Tipo.NULL   ],
+]
+
+export const potencia: Tipo[][] = [
+    [Tipo.ENTERO,  Tipo.DECIMAL ],
+    [Tipo.DECIMAL, Tipo.DECIMAL],
+]

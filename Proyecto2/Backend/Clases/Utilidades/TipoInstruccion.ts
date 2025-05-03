@@ -1,6 +1,7 @@
 export enum TipoInstruccion {
     IMPRIMIR,
     CREAR_VARIABLE,
+    CREAR_OBJETO,
     ASIGNACION,
     INCREMENTO,
     DECREMENTO,

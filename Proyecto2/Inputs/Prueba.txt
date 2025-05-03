@@ -31,3 +31,26 @@ fin funcion
 
 imprimir "Resta = " + resta()
 imprimir "Suma = " + suma(12, 10)
+
+funcion triangulo cadena
+    ingresar i como entero con valor 0
+    ingresar j como entero con valor 0
+    ingresar altura como entero con valor 5
+    ingresar linea como cadena con valor ""
+    ingresar figura como cadena con valor ""
+
+    para i -> 1 hasta altura + 1 con incremento i++ hacer
+        linea -> ""
+        para j -> 1 hasta i con incremento i++ hacer
+            linea -> linea + "*"
+        fin para
+        figura -> figura + linea + "\n"
+    fin para
+    retornar figura
+fin funcion
+
+imprimir "multiplicacion = " + multiplicacion(10, 5)
+
+imprimir '2' == 50
+
+imprimir "Si llegaste hasta aquí, ¡felicidades!🎊\nEstarás en Compi2\ten el \"2s2025\" 😎"

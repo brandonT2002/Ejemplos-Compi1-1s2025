@@ -3,10 +3,15 @@ import { salidasConsola } from "../Utilidades/Salida";
 import { Tipo } from "../Utilidades/Tipo";
 import { Simbolo } from "./Simbolo";
 import { Funcion } from "../Instrucciones/Funcion";
+import { tablaSimbolos } from "./Tabla";
+import { SimboloTabla } from "./SimboloTabla";
+import { Objeto } from "./Objeto";
+import { Atributo } from "../Expresiones/Atributo";
 
 export class Entorno {
     public ids: Map<string, Simbolo> = new Map<string, Simbolo>()
     public funciones: Map<string, Funcion> = new Map<string, Funcion>()
+    public objetos: Map<string, Objeto> = new Map<string, Objeto>()
 
     constructor(private anterior: Entorno | null, public nombre: string) {}
 
@@ -16,6 +21,8 @@ export class Entorno {
         if (!entorno.ids.has(id)) {
             // Guardar variable
             entorno.ids.set(id, new Simbolo(valor, id, tipo))
+            // Insertamos en la tabla de simbolos
+            tablaSimbolos.push(new SimboloTabla(linea, columna, true, true, valor, tipo, id, entorno.nombre))
         }
         // Error semántico - Variable ya existe
     }
@@ -46,6 +53,44 @@ export class Entorno {
         }
     }
 
+    // === GUARDAR OBJETO ===
+    public guardarObjeto(id: string, atributos: Atributo[]) {
+        let entorno: Entorno = this
+        if (!entorno.objetos.has(id)) {
+            // console.log(atributos)
+            this.objetos.set(id, new Objeto(id))
+            this.guardarAtributo(id, atributos)
+        }
+        // Error semántico - Objeto ya existe
+    }
+
+    public guardarAtributo(id: string, atributo: Atributo[]) {
+        let entorno: Entorno = this
+        if (entorno.objetos.has(id)) {
+            let objeto: Objeto = entorno.objetos.get(id)!
+            for (let i = 0; i < atributo.length; i++) {
+                // console.log(atributo[i])
+                objeto.atributos.set(atributo[i].id, atributo[i])
+            }
+        }
+        // Error semántico - Objeto no existe
+    }
+
+    // === OBTENER OBJETO ===
+    public getObjeto(id: string): Objeto | null {
+        let entorno: Entorno | null = this
+        while (entorno != null) {
+            if (entorno.objetos.has(id)) {
+                console.log('Objeto encontrado: ' + id)
+                console.log(entorno.objetos.get(id))
+                return entorno.objetos.get(id)!
+            }
+            entorno = entorno.anterior
+        }
+        // Error semántico - Objeto no existe
+        return null
+    }
+
     // === GUARDAR FUNCION ===
     public guardarFuncion(id: string, funcion: Funcion) {
         let entorno: Entorno = this
@@ -54,6 +99,8 @@ export class Entorno {
             // console.log('Guardando funcion: ' + id + ' en el entorno: ' + entorno.nombre)
             // console.log(funcion)
             entorno.funciones.set(id, funcion)
+            // Insertamos en la tabla de simbolos
+            tablaSimbolos.push(new SimboloTabla(funcion.linea, funcion.columna, false, false, null, funcion.tipo, id, entorno.nombre))
         }
         // Error semántico - Funcion ya existe
     }

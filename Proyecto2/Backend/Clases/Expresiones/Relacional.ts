@@ -17,6 +17,8 @@ export class Relacional extends Expresion{
                 return this.diferente(entorno);
             case '>=':
                 return this.mayorIgual(entorno);
+            case '<=':
+                return this.menorIgual(entorno);
             default:
                 throw new Error(`Operador logico no reconocido: ${this.signo}`);
         }
@@ -47,8 +49,15 @@ export class Relacional extends Expresion{
         return {valor: valor1.valor || valor2.valor, tipo: this.tipo};
     }
     mayorIgual (entorno: Entorno): TipoRetorno {
-        const valor = this.exp2.ejecutar(entorno);
+        const valor1 = this.exp2.ejecutar(entorno);
+        const valor2 = this.exp1.ejecutar(entorno);
         this.tipo = Tipo.BOOLEANO;
-        return {valor: ! valor.valor, tipo: this.tipo};
+        return {valor: valor1.valor >= valor2.valor, tipo: this.tipo};
+    }
+    menorIgual (entorno: Entorno): TipoRetorno {
+        const valor1 = this.exp2.ejecutar(entorno);
+        const valor2 = this.exp1.ejecutar(entorno);
+        this.tipo = Tipo.BOOLEANO;
+        return {valor: valor1.valor <= valor2.valor, tipo: this.tipo};
     }
 }

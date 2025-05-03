@@ -1,0 +1,5 @@
+objeto carro (
+        modelo cadena
+)
+
+imprimir objeto carro()

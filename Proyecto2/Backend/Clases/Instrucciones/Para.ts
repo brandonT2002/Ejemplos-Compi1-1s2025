@@ -7,7 +7,7 @@ import { Bloque } from "./Bloque";
 
 export class Para extends Instruccion{
     private bloque: Bloque;
-    constructor(linea: number, columna: number, private inicio: string, private limiteInferior: Expresion, private limiteSuperior: Expresion, private instrucciones: Instruccion[]) {
+    constructor(linea: number, columna: number, private inicio: string, private limiteInferior: Expresion, private limiteSuperior: Expresion, private paso: string, private instrucciones: Instruccion[]) {
         super(linea, columna, TipoInstruccion.PARA);
         this.bloque = new Bloque(linea, columna, instrucciones);
     }
@@ -25,18 +25,34 @@ export class Para extends Instruccion{
             return;
         }
         // Buscar la variable del iterador
-        if (entorno.getVariable(this.inicio)){
-            for (let i = limiteInferior.valor; i <= limiteSuperior.valor; i++) {
-                entorno.setVariable(this.inicio, i);
-                let bloque = this.bloque.ejecutar(entornoLocal);
-                if (bloque) {
-                    if (bloque.valor == TipoInstruccion.CONTINUAR) {
-                        continue; // Continuar con la siguiente iteración
+        if (this.paso == 'incremento') {
+            if (entorno.getVariable(this.inicio)){
+                for (let i = limiteInferior.valor; i <= limiteSuperior.valor; i++) {
+                    entorno.setVariable(this.inicio, i);
+                    let bloque = this.bloque.ejecutar(entornoLocal);
+                    if (bloque) {
+                        if (bloque.valor == TipoInstruccion.CONTINUAR) {
+                            continue; // Continuar con la siguiente iteración
+                        }
+                        return bloque;
                     }
-                    return bloque;
                 }
+                return;
             }
-            return;
+        } else if (this.paso == 'decremento') {
+            if (entorno.getVariable(this.inicio)){
+                for (let i = limiteInferior.valor; i >= limiteSuperior.valor; i--) {
+                    entorno.setVariable(this.inicio, i);
+                    let bloque = this.bloque.ejecutar(entornoLocal);
+                    if (bloque) {
+                        if (bloque.valor == TipoInstruccion.CONTINUAR) {
+                            continue; // Continuar con la siguiente iteración
+                        }
+                        return bloque;
+                    }
+                }
+                return;
+            }
         }
     }
 }
